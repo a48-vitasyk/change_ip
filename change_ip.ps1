@@ -33,7 +33,6 @@ if ($interfaces.Count -gt 1) {
     $interface = $interfaces[0]
 }
 
-
 # Displaying current IP address and gateway
 $current_ip = $interface.IPv4Address.IPAddress
 $current_gateway = $interface.IPv4DefaultGateway.NextHop
@@ -45,8 +44,9 @@ Start-Sleep -Seconds 3
 
 $interfaceIndex = $interface.InterfaceIndex
 
-# Removing the old IP address
+# Removing the old IP address and gateway
 Remove-NetIPAddress -InterfaceIndex $interfaceIndex -Confirm:$false
+Remove-NetRoute -InterfaceIndex $interfaceIndex -DestinationPrefix "0.0.0.0/0" -Confirm:$false
 
 # Setting the new IP address
 New-NetIPAddress -InterfaceIndex $interfaceIndex -IPAddress $new_ip -PrefixLength 24
