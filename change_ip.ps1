@@ -39,20 +39,21 @@ $current_gateway = $interface.IPv4DefaultGateway.NextHop
 Write-Host "Current IP address: $current_ip"
 Write-Host "Current gateway: $current_gateway"
 
+# Print a separator line
+Write-Host "--------------------------------"
+
 # Delay
 Start-Sleep -Seconds 3
 
 $interfaceIndex = $interface.InterfaceIndex
 
-# Removing the old IP address and gateway
-Remove-NetIPAddress -InterfaceIndex $interfaceIndex -Confirm:$false
-Remove-NetRoute -InterfaceIndex $interfaceIndex -DestinationPrefix "0.0.0.0/0" -Confirm:$false
+# Removing the old IP address and gateway, suppressing the output
+Remove-NetIPAddress -InterfaceIndex $interfaceIndex -Confirm:$false | Out-Null
+Remove-NetRoute -InterfaceIndex $interfaceIndex -DestinationPrefix "0.0.0.0/0" -Confirm:$false | Out-Null
 
-# Setting the new IP address
-New-NetIPAddress -InterfaceIndex $interfaceIndex -IPAddress $new_ip -PrefixLength 24
-
-# Setting the new default gateway
-New-NetRoute -InterfaceIndex $interfaceIndex -DestinationPrefix "0.0.0.0/0" -NextHop $new_gateway
+# Setting the new IP address and gateway, suppressing the output
+New-NetIPAddress -InterfaceIndex $interfaceIndex -IPAddress $new_ip -PrefixLength 24 | Out-Null
+New-NetRoute -InterfaceIndex $interfaceIndex -DestinationPrefix "0.0.0.0/0" -NextHop $new_gateway | Out-Null
 
 # Displaying the new IP address and gateway
 Write-Host "New IP address: $new_ip"
