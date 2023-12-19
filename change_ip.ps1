@@ -33,6 +33,7 @@ if ($interfaces.Count -gt 1) {
     $interface = $interfaces[0]
 }
 
+
 # Displaying current IP address and gateway
 $current_ip = $interface.IPv4Address.IPAddress
 $current_gateway = $interface.IPv4DefaultGateway.NextHop
